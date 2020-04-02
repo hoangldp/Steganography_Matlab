@@ -1,6 +1,6 @@
-function embed(inputFile, secret, outputFile)
+function embed = embed(inputFile, secret)
     image = imread(inputFile);
     imageEmbed = embedSecret(image, secret);
-    imwrite(imageEmbed, outputFile);
+    embed = imageEmbed;
 end
 
