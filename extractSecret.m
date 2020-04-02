@@ -51,9 +51,15 @@ function secret = extractSecret(image)
     else
         len = length(result);
         subtracting = mod(len, 24);
-        extract = extractBetween(result, 1, len - subtracting);
+        extract = extractBetween(result, 1, len - subtracting - 24);
         result = extract{1, 1};
-
+        
+        if endsWith(result, dec2bin(0, 24))
+            len = length(result);
+            extract = extractBetween(result, 1, len - 24);
+            result = extract{1, 1};
+        end
+        
         secret = getSecret(result);
     end
 end

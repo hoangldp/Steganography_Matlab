@@ -14,7 +14,7 @@ function secret = getSecret(data)
         endPos = i * 24;
         c = extractBetween(data, startPos, endPos);
         b = bin2dec(c);
-        result = strcat(result, char(b));
+        result = [result, char(b)];
     end
     
     secret = result;
