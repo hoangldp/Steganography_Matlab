@@ -11,8 +11,8 @@ function secret = extractSecret(image)
     strStop = dec2bin(0, 48);
     lenStop = length(strStop);
     
-    for i = 2:2:w
-        for j = 2:2:h
+    for i = 2:2:w-1
+        for j = 2:2:h-1
             p = image(i, j, :);
             g = getGray(p);
             

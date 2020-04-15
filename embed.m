@@ -1,6 +1,7 @@
-function embed = embed(inputFile, secret)
+function [embed, bit] = embed(inputFile, secret)
     image = imread(inputFile);
-    imageEmbed = embedSecret(image, secret);
+    [imageEmbed, bitEmbed] = embedSecret(image, secret);
     embed = imageEmbed;
+    bit = bitEmbed;
 end
 

@@ -1,4 +1,4 @@
-function embed = embedSecret(image, secret)
+function [embed, bit] = embedSecret(image, secret)
     [w, h, d] = size(image);
     
     if d ~= 3 || w < 3 || h < 3
@@ -11,8 +11,9 @@ function embed = embedSecret(image, secret)
     
     pos = 1;
     stop = false;
-    for i = 2:2:w
-        for j = 2:2:h
+    count = 0;
+    for i = 2:2:w-1
+        for j = 2:2:h-1
             p = image(i, j, :);
             
             pUpper = image(i, j - 1, :);
@@ -34,6 +35,7 @@ function embed = embedSecret(image, secret)
                 adding = 0;
             end
             
+            count = count + n - adding;
             dataEmbed = extractBetween(data, pos, pos + n - 1 - adding);
             if adding > 0
                 dataEmbed = strcat(dataEmbed, dec2bin(0, adding));
@@ -71,5 +73,6 @@ function embed = embedSecret(image, secret)
     end
     
     embed = image;
+    bit = count - 48;
 end
 
