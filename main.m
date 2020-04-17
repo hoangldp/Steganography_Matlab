@@ -22,7 +22,7 @@ function varargout = main(varargin)
 
 % Edit the above text to modify the response to help main
 
-% Last Modified by GUIDE v2.5 15-Apr-2020 23:19:20
+% Last Modified by GUIDE v2.5 17-Apr-2020 09:36:21
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -218,5 +218,84 @@ if isfield(handles, 'imageOrigin')
     count = getMaxEmbed(handles.imageOrigin);
     info = [int2str(count / 8), ' byte', ' (', int2str(count / 8 / 1024), ' KB)'];
     set(handles.lblMaxBitEmbed, 'string', info);
-    set(handles.btnGetMaxBit,'Enable','on');
+    set(handles.btnGetMaxBit, 'Enable', 'on');
 end
+
+
+% --------------------------------------------------------------------
+function mnSystem_Callback(hObject, eventdata, handles)
+% hObject    handle to mnSystem (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function mnHelp_Callback(hObject, eventdata, handles)
+% hObject    handle to mnHelp (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function mnReset_Callback(hObject, eventdata, handles)
+% hObject    handle to mnReset (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+if isfield(handles, 'fileNameImageOrigin')
+    handles = rmfield(handles, 'fileNameImageOrigin');
+end
+if isfield(handles, 'imageOrigin')
+    handles = rmfield(handles, 'imageOrigin');
+end
+if isfield(handles, 'fileNameImageEmbed')
+    handles = rmfield(handles, 'fileNameImageEmbed');
+end
+if isfield(handles, 'imageEmbed')
+    handles = rmfield(handles, 'imageEmbed');
+end
+
+set(get(handles.axesImageOrigin, 'Parent'), 'HandleVisibility', 'on');
+axes(handles.axesImageOrigin);
+cla(handles.axesImageOrigin,'reset');
+set(handles.axesImageOrigin, 'Visible', 'off');
+
+set(get(handles.axesImageEmbed, 'Parent'), 'HandleVisibility', 'on');
+axes(handles.axesImageEmbed);
+cla(handles.axesImageEmbed, 'reset');
+set(handles.axesImageEmbed, 'Visible', 'off');
+
+set(handles.lblMaxBitEmbed, 'string', '');
+set(handles.lblBitEmbed, 'string', '');
+
+set(handles.txtSecretOutput, 'string', '');
+set(handles.txtSecretInput, 'string', '');
+
+
+
+% --------------------------------------------------------------------
+function mnExit_Callback(hObject, eventdata, handles)
+% hObject    handle to mnExit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+closereq();
+
+
+% --------------------------------------------------------------------
+function mnAbout_Callback(hObject, eventdata, handles)
+% hObject    handle to mnAbout (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% f1 = figure;    % The figure we want to transfer to
+% h2 = subplot(3,3,4);    % The axes we want to transfer to
+% od = open('about.fig');  % Load our saved figure
+%get(get(x,'CurrentAxes'))
+% This command displays all the options we can
+%   transfer over, for this example, I'll just transfer the data
+% datahandles = get(get(x,'CurrentAxes'),'Children');
+% for ii = 1:length(datahandles)
+%     set(datahandles(ii),'Parent',h2);
+% end
+% Close the other figure
+% close(od)
+% open('about.fig');
