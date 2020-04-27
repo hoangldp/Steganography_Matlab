@@ -1,4 +1,4 @@
-function maxBit = getMaxEmbed(image)
+function maxBit = getMaxEmbed(image, method)
     [w, h, d] = size(image);
     
     if d ~= 3 || w < 3 || h < 3
@@ -18,7 +18,16 @@ function maxBit = getMaxEmbed(image)
             pBottomLeft = image(i - 1, j + 1, :);
             pBottomRight = image(i + 1, j + 1, :);
             
-            n = getCapacity(pUpper, pLeft, pRight, pBottom, pUpperLeft, pUpperRight, pBottomLeft, pBottomRight);
+            n = 0;
+            if method == 5
+                n = getCapacity(pUpper, pLeft, pRight, pBottom, pUpperRight);
+            elseif method == 6
+                n = getCapacity(pUpper, pLeft, pRight, pBottom, pUpperLeft, pUpperRight);
+            elseif method == 7
+                n = getCapacity(pUpper, pLeft, pRight, pBottom, pUpperLeft, pUpperRight, pBottomLeft);
+            elseif method == 8
+                n = getCapacity(pUpper, pLeft, pRight, pBottom, pUpperLeft, pUpperRight, pBottomLeft, pBottomRight);
+            end
             result = result + n;
         end
     end

@@ -1,5 +1,5 @@
-function secret = extract(inputFile)
+function secret = extract(inputFile, method)
     image = imread(inputFile);
-    secret = extractSecret(image);
+    secret = extractSecret(image, method);
 end
 

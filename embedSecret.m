@@ -1,4 +1,4 @@
-function [embed, bit] = embedSecret(image, secret)
+function [embed, bit] = embedSecret(image, method, secret)
     [w, h, d] = size(image);
     
     if d ~= 3 || w < 3 || h < 3
@@ -26,7 +26,16 @@ function [embed, bit] = embedSecret(image, secret)
             pBottomLeft = imageCopy(i - 1, j + 1, :);
             pBottomRight = imageCopy(i + 1, j + 1, :);
             
-            n = getCapacity(pUpper, pLeft, pRight, pBottom, pUpperLeft, pUpperRight, pBottomLeft, pBottomRight);
+            n = 0;
+            if method == 5
+                n = getCapacity(pUpper, pLeft, pRight, pBottom, pUpperRight);
+            elseif method == 6
+                n = getCapacity(pUpper, pLeft, pRight, pBottom, pUpperLeft, pUpperRight);
+            elseif method == 7
+                n = getCapacity(pUpper, pLeft, pRight, pBottom, pUpperLeft, pUpperRight, pBottomLeft);
+            elseif method == 8
+                n = getCapacity(pUpper, pLeft, pRight, pBottom, pUpperLeft, pUpperRight, pBottomLeft, pBottomRight);
+            end
             
             adding = len - pos + 1 - n;
             stop = adding < 0;

@@ -22,7 +22,7 @@ function varargout = main(varargin)
 
 % Edit the above text to modify the response to help main
 
-% Last Modified by GUIDE v2.5 17-Apr-2020 09:36:21
+% Last Modified by GUIDE v2.5 27-Apr-2020 15:29:05
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -55,6 +55,7 @@ function main_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for main
 handles.output = hObject;
 
+handles.method = 5;
 % Update handles structure
 guidata(hObject, handles);
 
@@ -149,7 +150,7 @@ if isempty(secret) || ~isfield(handles, 'fileNameImageOrigin')
     disp('Error: Must enter secret and chose image.');
 else
     fileName = handles.fileNameImageOrigin;
-    [image, count] = embed(fileName, secret);
+    [image, count] = embed(fileName, handles.method, secret);
     handles.imageEmbed = image;
     guidata(hObject, handles);
     axes(handles.axesImageEmbed);
@@ -168,7 +169,7 @@ if ~isfield(handles, 'imageEmbed')
     return;
 else
     image = handles.imageEmbed;
-    secret = extractSecret(image);
+    secret = extractSecret(image, handles.method);
     set(handles.txtSecretOutput, 'string', secret);
 end
 
@@ -215,7 +216,7 @@ function btnGetMaxBit_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 if isfield(handles, 'imageOrigin')
     set(handles.btnGetMaxBit,'Enable','off');
-    count = getMaxEmbed(handles.imageOrigin);
+    count = getMaxEmbed(handles.imageOrigin, handles.method);
     info = [int2str(count / 8), ' byte', ' (', int2str(count / 8 / 1024), ' KB)'];
     set(handles.lblMaxBitEmbed, 'string', info);
     set(handles.btnGetMaxBit, 'Enable', 'on');
@@ -299,3 +300,36 @@ function mnAbout_Callback(hObject, eventdata, handles)
 % Close the other figure
 % close(od)
 % open('about.fig');
+
+
+% --- Executes when selected object is changed in uibuttongroup1.
+function uibuttongroup1_SelectionChangedFcn(hObject, eventdata, handles)
+% hObject    handle to the selected object in uibuttongroup1 
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+switch (get(eventdata.NewValue, 'Tag'))
+    case 'rdFive'
+        handles.method = 5;
+    case 'rdSix'
+        handles.method = 6;
+    case 'rdSeven'
+        handles.method = 7;
+    case 'rdEight'
+        handles.method = 8;
+end
+guidata(hObject, handles);
+
+
+% --- Executes on button press in btnPsnr.
+function btnPsnr_Callback(hObject, eventdata, handles)
+% hObject    handle to btnPsnr (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+if ~isfield(handles, 'imageEmbed') || ~isfield(handles, 'imageOrigin')
+    return;
+else
+    imageEmbed = handles.imageEmbed;
+    imageOrigin = handles.imageOrigin;
+    psnr = getPeakSignalNoiseRatio(imageOrigin, imageEmbed);
+    set(handles.lblPsnr, 'string', psnr);
+end
