@@ -6,6 +6,7 @@ function [embed, bit] = embedSecret(image, secret)
         exit;
     end
     
+    imageCopy = image;
     data = strcat(getData(secret), dec2bin(0, 48));
     len = length(data);
     
@@ -14,16 +15,16 @@ function [embed, bit] = embedSecret(image, secret)
     count = 0;
     for i = 2:2:w-1
         for j = 2:2:h-1
-            p = image(i, j, :);
+            p = imageCopy(i, j, :);
             
-            pUpper = image(i, j - 1, :);
-            pLeft = image(i - 1, j, :);
-            pRight = image(i + 1, j, :);
-            pBottom = image(i, j + 1, :);
-            pUpperLeft = image(i - 1, j - 1, :);
-            pUpperRight = image(i + 1, j - 1, :);
-            pBottomLeft = image(i - 1, j + 1, :);
-            pBottomRight = image(i + 1, j + 1, :);
+            pUpper = imageCopy(i, j - 1, :);
+            pLeft = imageCopy(i - 1, j, :);
+            pRight = imageCopy(i + 1, j, :);
+            pBottom = imageCopy(i, j + 1, :);
+            pUpperLeft = imageCopy(i - 1, j - 1, :);
+            pUpperRight = imageCopy(i + 1, j - 1, :);
+            pBottomLeft = imageCopy(i - 1, j + 1, :);
+            pBottomRight = imageCopy(i + 1, j + 1, :);
             
             n = getCapacity(pUpper, pLeft, pRight, pBottom, pUpperLeft, pUpperRight, pBottomLeft, pBottomRight);
             
@@ -45,9 +46,9 @@ function [embed, bit] = embedSecret(image, secret)
             newGray = calculateGrayEmbed(p, n, b);
             [r, g, b] = changeGray(p, newGray);
             
-            image(i, j, 1) = r;
-            image(i, j, 2) = g;
-            image(i, j, 3) = b;
+            imageCopy(i, j, 1) = r;
+            imageCopy(i, j, 2) = g;
+            imageCopy(i, j, 3) = b;
             
             pos = pos + n;
             
@@ -72,7 +73,6 @@ function [embed, bit] = embedSecret(image, secret)
         exit;
     end
     
-    embed = image;
+    embed = imageCopy;
     bit = count - 48;
 end
-
