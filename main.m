@@ -271,6 +271,8 @@ set(handles.lblBitEmbed, 'string', '');
 set(handles.txtSecretOutput, 'string', '');
 set(handles.txtSecretInput, 'string', '');
 
+set(handles.lblPsnr, 'string', '');
+
 
 
 % --------------------------------------------------------------------
