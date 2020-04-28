@@ -22,7 +22,7 @@ function varargout = main(varargin)
 
 % Edit the above text to modify the response to help main
 
-% Last Modified by GUIDE v2.5 27-Apr-2020 15:29:05
+% Last Modified by GUIDE v2.5 28-Apr-2020 11:59:24
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -232,7 +232,7 @@ function mnSystem_Callback(hObject, eventdata, handles)
 
 % --------------------------------------------------------------------
 function mnHelp_Callback(hObject, eventdata, handles)
-% hObject    handle to mnHelp (see GCBO)
+% hObject    handle to mnAbout (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -288,20 +288,7 @@ function mnAbout_Callback(hObject, eventdata, handles)
 % hObject    handle to mnAbout (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-% f1 = figure;    % The figure we want to transfer to
-% h2 = subplot(3,3,4);    % The axes we want to transfer to
-% od = open('about.fig');  % Load our saved figure
-%get(get(x,'CurrentAxes'))
-% This command displays all the options we can
-%   transfer over, for this example, I'll just transfer the data
-% datahandles = get(get(x,'CurrentAxes'),'Children');
-% for ii = 1:length(datahandles)
-%     set(datahandles(ii),'Parent',h2);
-% end
-% Close the other figure
-% close(od)
-% open('about.fig');
+open('about.fig');
 
 
 % --- Executes when selected object is changed in uibuttongroup1.
@@ -334,4 +321,37 @@ else
     imageOrigin = handles.imageOrigin;
     psnr = getPeakSignalNoiseRatio(imageOrigin, imageEmbed);
     set(handles.lblPsnr, 'string', psnr);
+end
+
+
+% --- Executes on button press in btnShowHistogram.
+function btnShowHistogram_Callback(hObject, eventdata, handles)
+% hObject    handle to btnShowHistogram (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+if ~isfield(handles, 'imageEmbed') && ~isfield(handles, 'imageOrigin')
+    return;
+else
+    figure;
+    if isfield(handles, 'imageOrigin')
+        imageOrigin = handles.imageOrigin;
+        [OriginRed, xRed] = imhist(imageOrigin(:,:,1));
+        [OriginGreen, xGreen] = imhist(imageOrigin(:,:,2));
+        [OriginBlue, xBlue] = imhist(imageOrigin(:,:,3));
+
+        subplot(3,2,1), bar(xRed, OriginRed, 'Red');
+        subplot(3,2,3), bar(xGreen, OriginGreen, 'Green');
+        subplot(3,2,5), bar(xBlue, OriginBlue, 'Blue');
+    end
+
+    if isfield(handles, 'imageEmbed')
+        imageEmbed = handles.imageEmbed;
+        [EmbedRed, yRed] = imhist(imageEmbed(:,:,1));
+        [EmbedGreen, yGreen] = imhist(imageEmbed(:,:,2));
+        [EmbedBlue, yBlue] = imhist(imageEmbed(:,:,3));
+
+        subplot(3,2,2), bar(yRed, EmbedRed, 'Red');
+        subplot(3,2,4), bar(yGreen, EmbedGreen, 'Green');
+        subplot(3,2,6), bar(yBlue, EmbedBlue, 'Blue');
+    end
 end
