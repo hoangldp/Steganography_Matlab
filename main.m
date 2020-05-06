@@ -22,7 +22,7 @@ function varargout = main(varargin)
 
 % Edit the above text to modify the response to help main
 
-% Last Modified by GUIDE v2.5 28-Apr-2020 11:59:24
+% Last Modified by GUIDE v2.5 06-May-2020 23:32:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -273,6 +273,10 @@ set(handles.txtSecretInput, 'string', '');
 
 set(handles.lblPsnr, 'string', '');
 
+set(handles.pnEmbed, 'visible', 'on');
+set(handles.pnExtract, 'visible', 'off');
+set(handles.pnEvaluate, 'visible', 'off');
+
 
 
 % --------------------------------------------------------------------
@@ -355,3 +359,31 @@ else
         subplot(3,2,6), bar(yBlue, EmbedBlue, 'Blue');
     end
 end
+
+
+% --- Executes on button press in btnShowEmbed.
+function btnShowEmbed_Callback(hObject, eventdata, handles)
+% hObject    handle to btnShowEmbed (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.pnEmbed, 'visible', 'on');
+set(handles.pnExtract, 'visible', 'off');
+set(handles.pnEvaluate, 'visible', 'off');
+
+% --- Executes on button press in btnShowExtract.
+function btnShowExtract_Callback(hObject, eventdata, handles)
+% hObject    handle to btnShowExtract (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.pnEmbed, 'visible', 'off');
+set(handles.pnExtract, 'visible', 'on');
+set(handles.pnEvaluate, 'visible', 'off');
+
+% --- Executes on button press in btnShowEvaluate.
+function btnShowEvaluate_Callback(hObject, eventdata, handles)
+% hObject    handle to btnShowEvaluate (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.pnEmbed, 'visible', 'off');
+set(handles.pnExtract, 'visible', 'off');
+set(handles.pnEvaluate, 'visible', 'on');
