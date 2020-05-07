@@ -22,7 +22,7 @@ function varargout = main(varargin)
 
 % Edit the above text to modify the response to help main
 
-% Last Modified by GUIDE v2.5 06-May-2020 23:32:16
+% Last Modified by GUIDE v2.5 07-May-2020 10:39:01
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -157,6 +157,14 @@ else
     imshow(handles.imageEmbed);
     info = [int2str(count / 8), ' byte', ' (', int2str(count / 8 / 1024), ' KB)'];
     set(handles.lblBitEmbed, 'string', info);
+    
+    if isfield(handles, 'imageOrigin')
+        set(handles.btnGetMaxBit,'Enable','off');
+        count = getMaxEmbed(handles.imageOrigin, handles.method);
+        info = [int2str(count / 8), ' byte', ' (', int2str(count / 8 / 1024), ' KB)'];
+        set(handles.lblMaxBitEmbed, 'string', info);
+        set(handles.btnGetMaxBit, 'Enable', 'on');
+    end
 end
 
 
@@ -171,6 +179,15 @@ else
     image = handles.imageEmbed;
     secret = extractSecret(image, handles.method);
     set(handles.txtSecretOutput, 'string', secret);
+    
+    if ~isfield(handles, 'imageEmbed') || ~isfield(handles, 'imageOrigin')
+        return;
+    else
+        imageEmbed = handles.imageEmbed;
+        imageOrigin = handles.imageOrigin;
+        psnr = getPeakSignalNoiseRatio(imageOrigin, imageEmbed);
+        set(handles.lblPsnr, 'string', psnr);
+    end
 end
 
 
@@ -334,6 +351,7 @@ function btnShowHistogram_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 if ~isfield(handles, 'imageEmbed') && ~isfield(handles, 'imageOrigin')
+    disp('Error: Must chose image.');
     return;
 else
     figure;
@@ -387,3 +405,28 @@ function btnShowEvaluate_Callback(hObject, eventdata, handles)
 set(handles.pnEmbed, 'visible', 'off');
 set(handles.pnExtract, 'visible', 'off');
 set(handles.pnEvaluate, 'visible', 'on');
+
+
+% --- Executes on selection change in cbMethod.
+function cbMethod_Callback(hObject, eventdata, handles)
+% hObject    handle to cbMethod (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns cbMethod contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from cbMethod
+methodIndex = get(handles.cbMethod, 'value');
+handles.method = methodIndex + 4;
+guidata(hObject, handles);
+
+% --- Executes during object creation, after setting all properties.
+function cbMethod_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to cbMethod (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
