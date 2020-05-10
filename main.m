@@ -165,6 +165,15 @@ else
         set(handles.lblMaxBitEmbed, 'string', info);
         set(handles.btnGetMaxBit, 'Enable', 'on');
     end
+    
+    if ~isfield(handles, 'imageEmbed') || ~isfield(handles, 'imageOrigin')
+        return;
+    else
+        imageEmbed = handles.imageEmbed;
+        imageOrigin = handles.imageOrigin;
+        psnr = getPeakSignalNoiseRatio(imageOrigin, imageEmbed);
+        set(handles.lblPsnr, 'string', psnr);
+    end
 end
 
 
@@ -179,15 +188,6 @@ else
     image = handles.imageEmbed;
     secret = extractSecret(image, handles.method);
     set(handles.txtSecretOutput, 'string', secret);
-    
-    if ~isfield(handles, 'imageEmbed') || ~isfield(handles, 'imageOrigin')
-        return;
-    else
-        imageEmbed = handles.imageEmbed;
-        imageOrigin = handles.imageOrigin;
-        psnr = getPeakSignalNoiseRatio(imageOrigin, imageEmbed);
-        set(handles.lblPsnr, 'string', psnr);
-    end
 end
 
 
